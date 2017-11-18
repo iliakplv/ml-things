@@ -1,6 +1,12 @@
 # PyCharm files
 .idea
 
+# venv
+venv
+
+# temporary stuff
+tmp
+
 # mnist experiment
 tensorflow/mnist_data
 tensorflow/mnist_training
