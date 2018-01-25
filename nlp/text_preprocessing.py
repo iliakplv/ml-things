@@ -10,7 +10,9 @@
 # Vector space model
 # TF-IDF
 # number of words/paragraphs
-# number of spelling mistakes
+# number of spelling/grammar mistakes
+# is uppercase
+# is gibberish
 # hashing trick
 
 # TODO (ML)
