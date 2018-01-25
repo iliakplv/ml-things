@@ -93,4 +93,4 @@ for count_0, doc_0 in enumerate(sklearn_representation.toarray()):
         skl_tfidf_comparisons.append((cosine_similarity(doc_0, doc_1), count_0, count_1))
 
 for x in zip(sorted(our_tfidf_comparisons, reverse=True), sorted(skl_tfidf_comparisons, reverse=True)):
-    print x
+    print(x)
