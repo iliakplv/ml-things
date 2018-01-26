@@ -31,24 +31,27 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.utils.extmath import density
 from sklearn import metrics
 
-
 # Display progress logs on stdout
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(levelname)s %(message)s')
 
+verbose_default = True
 
 # parse commandline arguments
 op = OptionParser()
 op.add_option("--report",
+              default=verbose_default,
               action="store_true", dest="print_report",
               help="Print a detailed classification report.")
 op.add_option("--chi2_select",
               action="store", type="int", dest="select_chi2",
               help="Select some number of features using a chi-squared test")
 op.add_option("--confusion_matrix",
+              default=verbose_default,
               action="store_true", dest="print_cm",
               help="Print the confusion matrix.")
 op.add_option("--top10",
+              default=verbose_default,
               action="store_true", dest="print_top10",
               help="Print ten most discriminative terms per class"
                    " for every classifier.")
@@ -70,6 +73,7 @@ op.add_option("--filtered",
 def is_interactive():
     return not hasattr(sys.modules['__main__'], '__file__')
 
+
 # work-around for Jupyter notebook and IPython console
 argv = [] if is_interactive() else sys.argv[1:]
 (opts, args) = op.parse_args(argv)
@@ -77,10 +81,9 @@ if len(args) > 0:
     op.error("this script takes no arguments.")
     sys.exit(1)
 
-print(__doc__)
-op.print_help()
+# print(__doc__)
+# op.print_help()
 print()
-
 
 # #############################################################################
 # Load some categories from the training set
@@ -117,6 +120,7 @@ target_names = data_train.target_names
 
 def size_mb(docs):
     return sum(len(s.encode('utf-8')) for s in docs) / 1e6
+
 
 data_train_size_mb = size_mb(data_train.data)
 data_test_size_mb = size_mb(data_test.data)
@@ -271,9 +275,8 @@ print("LinearSVC with L1-based feature selection")
 # The smaller C, the stronger the regularization.
 # The more regularization, the more sparsity.
 results.append(benchmark(Pipeline([
-  ('feature_selection', SelectFromModel(LinearSVC(penalty="l1", dual=False,
-                                                  tol=1e-3))),
-  ('classification', LinearSVC(penalty="l2"))])))
+    ('feature_selection', SelectFromModel(LinearSVC(penalty="l1", dual=False, tol=1e-3))),
+    ('classification', LinearSVC(penalty="l2"))])))
 
 # make some plots
 
