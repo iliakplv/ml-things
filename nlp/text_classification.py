@@ -1,9 +1,3 @@
-# Author: Peter Prettenhofer <peter.prettenhofer@gmail.com>
-#         Olivier Grisel <olivier.grisel@ensta.org>
-#         Mathieu Blondel <mathieu@mblondel.org>
-#         Lars Buitinck
-# License: BSD 3 clause
-
 from __future__ import print_function
 
 import logging
