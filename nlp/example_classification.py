@@ -50,9 +50,9 @@ op.add_option("--confusion_matrix",
               default=verbose_default,
               action="store_true", dest="print_cm",
               help="Print the confusion matrix.")
-op.add_option("--top10",
+op.add_option("--top50",
               default=verbose_default,
-              action="store_true", dest="print_top10",
+              action="store_true", dest="print_top50",
               help="Print ten most discriminative terms per class"
                    " for every classifier.")
 op.add_option("--all_categories",
@@ -182,11 +182,6 @@ if feature_names:
     feature_names = np.asarray(feature_names)
 
 
-def trim(s):
-    """Trim string to fit on terminal (assuming 80-column display)"""
-    return s if len(s) <= 80 else s[:77] + "..."
-
-
 # #############################################################################
 # Benchmark classifiers
 def benchmark(clf):
@@ -210,17 +205,16 @@ def benchmark(clf):
         print("dimensionality: %d" % clf.coef_.shape[1])
         print("density: %f" % density(clf.coef_))
 
-        if opts.print_top10 and feature_names is not None:
-            print("top 10 keywords per class:")
+        if opts.print_top50 and feature_names is not None:
+            print("top 50 keywords per class:")
             for i, label in enumerate(target_names):
-                top10 = np.argsort(clf.coef_[i])[-10:]
-                print(trim("%s: %s" % (label, " ".join(feature_names[top10]))))
+                top50 = np.argsort(clf.coef_[i])[-50:]
+                print("\n%s:\n%s" % (label, " ".join(feature_names[top50])))
         print()
 
     if opts.print_report:
         print("classification report:")
-        print(metrics.classification_report(y_test, pred,
-                                            target_names=target_names))
+        print(metrics.classification_report(y_test, pred, target_names=target_names))
 
     if opts.print_cm:
         print("confusion matrix:")
@@ -246,18 +240,15 @@ for penalty in ["l2", "l1"]:
     print('=' * 80)
     print("%s penalty" % penalty.upper())
     # Train Liblinear model
-    results.append(benchmark(LinearSVC(penalty=penalty, dual=False,
-                                       tol=1e-3)))
+    results.append(benchmark(LinearSVC(penalty=penalty, dual=False, tol=1e-3)))
 
     # Train SGD model
-    results.append(benchmark(SGDClassifier(alpha=.0001, n_iter=50,
-                                           penalty=penalty)))
+    results.append(benchmark(SGDClassifier(alpha=.0001, n_iter=50, penalty=penalty)))
 
 # Train SGD with Elastic Net penalty
 print('=' * 80)
 print("Elastic-Net penalty")
-results.append(benchmark(SGDClassifier(alpha=.0001, n_iter=50,
-                                       penalty="elasticnet")))
+results.append(benchmark(SGDClassifier(alpha=.0001, n_iter=50, penalty="elasticnet")))
 
 # Train NearestCentroid without threshold
 print('=' * 80)
