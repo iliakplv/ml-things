@@ -1,16 +1,16 @@
-# PyCharm files
+# PyCharm config
 .idea
 
 # venv
 venv
 
-# data
-data
-
-# temporary stuff
+# Temporary stuff
 tmp
 
-# TF data and models
+# NLP
+nlp/data
+
+# TensorFlow
 tensorflow/mnist_data
 tensorflow/mnist_training
 tensorflow/tf_dataset_and_estimator_apis
