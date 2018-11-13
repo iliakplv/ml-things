@@ -7,6 +7,12 @@ class Vector:
     def __len__(self):
         return len(self.vector)
 
+    def __add__(self, other):
+        if len(self) != len(other):
+            raise Exception('Different size vectors')
+        result = [self.vector[i] + other.vector[i] for i in range(len(self))]
+        return Vector(result)
+
     def print(self):
         for item in self.vector:
             print('[ {} ]'.format(item))
@@ -37,9 +43,12 @@ class Matrix:
 
 if __name__ == '__main__':
     v = Vector([1, 2, 3])
-    v.print()
     print(len(v))
+    v.print()
+    v += v
+    print(len(v))
+    v.print()
 
     m = Matrix([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
-    m.print()
     print(m.dimensions())
+    m.print()
