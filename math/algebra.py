@@ -1,3 +1,14 @@
+def list_mul(l1, l2):
+    return [l1[i] * l2[i] for i in range(len(l1))]
+
+
+def list_sum(l):
+    sum = 0
+    for item in l:
+        sum += item
+    return sum
+
+
 class Vector:
     def __init__(self, vector):
         if not isinstance(vector, list):
@@ -10,8 +21,7 @@ class Vector:
     def __add__(self, other):
         if len(self) != len(other):
             raise Exception('Different size vectors')
-        result = [self.vector[i] + other.vector[i] for i in range(len(self))]
-        return Vector(result)
+        return Vector([self.vector[i] + other.vector[i] for i in range(len(self))])
 
     def print(self):
         for item in self.vector:
@@ -36,6 +46,11 @@ class Matrix:
     def dimensions(self):
         return self.rows, self.cols
 
+    def __mul__(self, vector):
+        if self.cols != len(vector):
+            raise Exception('Incompatible matrix/vector dimensions')
+        return Vector([list_sum(list_mul(row, vector.vector)) for row in self.matrix])
+
     def print(self):
         for row in self.matrix:
             print(row)
@@ -52,3 +67,8 @@ if __name__ == '__main__':
     m = Matrix([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
     print(m.dimensions())
     m.print()
+
+    print()
+    m = Matrix([[1, 1], [1, 2]])
+    v = Vector([3, 4])
+    (m * v).print()
